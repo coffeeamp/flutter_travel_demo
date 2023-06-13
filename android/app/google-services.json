@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "642361455021",
+    "project_id": "demp-d3f8f",
+    "storage_bucket": "demp-d3f8f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:642361455021:android:9dc5d8a0923433d893b124",
+        "android_client_info": {
+          "package_name": "com.example.flutter_travel_demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "642361455021-mp280i73ohqs5ttsdt9g0lah9m61au07.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkoJYPHvh5q-yAIybOo2ATMkEl7LaCEmk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "642361455021-mp280i73ohqs5ttsdt9g0lah9m61au07.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
