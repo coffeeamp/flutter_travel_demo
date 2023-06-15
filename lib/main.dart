@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_travel_demo/screens/main_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_travel_demo/screens/lobby_screen.dart';
+import 'package:flutter_travel_demo/screens/main_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 void main() async{
@@ -22,7 +24,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginSignupScreen(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(), // 로그인이 되어있는지 확인
+        builder: (context, snapshot){
+          if(snapshot.hasData){
+            return LobbyScreen();
+          }
+          return LoginSignupScreen();
+        },
+      ),
     );
   }
 }

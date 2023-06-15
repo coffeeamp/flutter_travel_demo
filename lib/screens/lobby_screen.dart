@@ -43,7 +43,6 @@ class _LobbyScreenState extends State<LobbyScreen> {
           IconButton(
             onPressed: (){
               _authentication.signOut();
-              Navigator.pop(context);
             },
             icon: Icon(Icons.exit_to_app_outlined),
           ),
