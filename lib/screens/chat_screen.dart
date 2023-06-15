@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_travel_demo/chatting/chat/message.dart';
+import 'package:flutter_travel_demo/chatting/chat/new_message.dart';
 
 
 class ChatScreen extends StatefulWidget {
@@ -40,28 +42,16 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: Text('Chat Screen')
       ),
-      body: StreamBuilder(
-        // collection은 테이블이라고 생각하면 됨, 테이블의 이름은 chats, 
-        // 그리고 그 테이블의 5eJ16uYrbBSZQRtO2L1i라는 id를 가진 테이블의 message를 가져옴
-        stream: FirebaseFirestore.instance.collection( 
-          '/chats/5eJ16uYrbBSZQRtO2L1i/message').snapshots(), // 실시간으로 데이터를 가져옴
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot){
-            final docs = snapshot.data!.docs; // final docs는 테이블의 내용
-            return ListView.builder(
-              itemCount: docs.length, // 테이블의 길이만큼 리스트뷰를 만듦
-              itemBuilder: (context, index){
-                return Container(
-                  child: Text(docs[index]['text'],
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.black,
-                    )
-                  ),
-                );
-              },
-            );
-          },
-      ),
+      body: Container(
+        child: Column(
+          children: [
+            Expanded(
+              child: Messages()
+            ),
+            NewMessage()
+          ],
+        ),
+      )
     );
   }
 }
