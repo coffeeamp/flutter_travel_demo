@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class NewMessage extends StatefulWidget {
   const NewMessage({super.key});
@@ -11,11 +12,14 @@ class NewMessage extends StatefulWidget {
 class _NewMessageState extends State<NewMessage> {
   final _controller = TextEditingController(); // 입력한 텍스트를 가져오기 위해 사용
   var _userEnteredMessage = '';
+
   void _sendMessage(){
     FocusScope.of(context).unfocus(); // 키보드가 사라지게 함
+    final user = FirebaseAuth.instance.currentUser;
     FirebaseFirestore.instance.collection('chat').add({
       'text': _userEnteredMessage,
       'time': Timestamp.now(), // 현재 시간을 가져옴
+      'userID': user!.uid
     });
     _controller.clear(); // 메시지를 보내고 나면 입력창을 비움
   }
@@ -29,6 +33,7 @@ class _NewMessageState extends State<NewMessage> {
         children: [
           Expanded(
             child: TextField(
+              maxLines: null,
               controller: _controller,
               decoration: InputDecoration(
                 labelText: 'Send a message...'
