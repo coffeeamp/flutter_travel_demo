@@ -491,6 +491,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 content: Text('이메일 혹은 비밀번호를 다시 확인하십시오.'),
                               ),
                             );
+                            setState(() {
+                                showSpinner = false; // 로딩 화면 제거
+                              });
                           }
                         } // 회원가입 창에서 로그인 버튼을 눌렀을 때
       
@@ -520,6 +523,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             }
                           }catch(e){
                             print(e);
+                            setState(() {
+                                showSpinner = false; // 로딩 화면 제거
+                              });
                           }
                         }
                       },
