@@ -25,10 +25,10 @@ class Messages extends StatelessWidget {
           reverse: true,
           itemCount: chatdocs.length,
           itemBuilder: (context, index){
-            return ChatBubbles( // 
+            return ChatBubbles( 
               chatdocs[index]['text'],
-              chatdocs[index]['userID'].toString() == user!.uid,
-              chatdocs[index]['userName'].toString(),
+              chatdocs[index]['userName'].toString(), // 메시지를 보낸 유저의 이름
+              chatdocs[index]['userID'].toString() == user!.uid, // 현재 유저의 uid와 메시지를 보낸 유저의 uid가 같으면 true, 다르면 false
             );
           },
         );

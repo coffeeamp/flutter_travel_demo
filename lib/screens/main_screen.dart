@@ -468,7 +468,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
                             .set({ // 회원가입 시 유저 정보 저장
                               'email': userEmail,
-                              'name': userName,
+                              'userName': userName,
                               'uid': newUser.user!.uid,
                             });
 

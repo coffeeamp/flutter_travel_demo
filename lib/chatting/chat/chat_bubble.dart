@@ -5,7 +5,7 @@ import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_8.dart';
 
 
 class ChatBubbles extends StatelessWidget {
-  const ChatBubbles(this.message, this.isMe, this.userName, {super.key});
+  const ChatBubbles(this.message, this.userName, this.isMe, {super.key});
 
   final String message;
   final String userName;
