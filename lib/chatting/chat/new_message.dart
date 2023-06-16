@@ -13,13 +13,15 @@ class _NewMessageState extends State<NewMessage> {
   final _controller = TextEditingController(); // 입력한 텍스트를 가져오기 위해 사용
   var _userEnteredMessage = '';
 
-  void _sendMessage(){
+  void _sendMessage()async{
     FocusScope.of(context).unfocus(); // 키보드가 사라지게 함
-    final user = FirebaseAuth.instance.currentUser;
+    final user = FirebaseAuth.instance.currentUser; // 현재 유저의 정보를 가져옴
+    final userData = await FirebaseFirestore.instance.collection('user').doc(user!.uid).get(); // 현재 유저의 uid를 가져옴
     FirebaseFirestore.instance.collection('chat').add({
       'text': _userEnteredMessage,
       'time': Timestamp.now(), // 현재 시간을 가져옴
-      'userID': user!.uid
+      'userID': user.uid,
+      'userName' : userData.data()!['userName'],
     });
     _controller.clear(); // 메시지를 보내고 나면 입력창을 비움
   }
@@ -36,7 +38,7 @@ class _NewMessageState extends State<NewMessage> {
               maxLines: null,
               controller: _controller,
               decoration: InputDecoration(
-                labelText: 'Send a message...'
+                labelText: '여기에 메세지 작성'
               ),
               onChanged: (value){
                 setState(() {
