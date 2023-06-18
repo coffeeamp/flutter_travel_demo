@@ -21,6 +21,7 @@ class _NewMessageState extends State<NewMessage> {
       'text': _userEnteredMessage,
       'time': Timestamp.now(), // 현재 시간을 가져옴
       'userID': user.uid,
+      'userImage' : userData['picked_image'],
       'userName' : userData.data()!['userName'],
     });
     _controller.clear(); // 메시지를 보내고 나면 입력창을 비움

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_travel_demo/add_image/add_image.dart';
+import 'dart:io';
 
 import 'package:flutter_travel_demo/config/palette.dart';
 import 'package:flutter_travel_demo/screens/lobby_screen.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({super.key});
@@ -23,12 +27,29 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
   String userName = '';
   String userEmail = '';
   String userPassword = '';
+  File? userPickedImage;
+
+  void pickedImage(File image){
+    userPickedImage = image;
+  }
 
   void _tryValidation(){
     final isValid = _formKey.currentState!.validate();
     if(isValid){
       _formKey.currentState!.save();
     }
+  }
+
+  void showAlert(BuildContext context){
+    showDialog(
+      context: context, 
+      builder: (context){
+        return Dialog(
+          backgroundColor: Colors.white,
+          child: AddImage(pickedImage), // 괄호가 없는 이유는 매서드를 호출해 실행하는 것이 아니라 포인터만 전달하기 때문.
+        );
+      }
+    );
   }
 
   @override
@@ -157,17 +178,32 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               },
                               child: Column(
                                 children: [
-                                  Text(
-                                    '회원가입',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color:isSignupScreen ? Palette.activeColor : Palette.textColor1
-                                    ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '회원가입',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color:isSignupScreen ? Palette.activeColor : Palette.textColor1
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 15,
+                                      ),
+                                      if(isSignupScreen)
+                                      GestureDetector(
+                                        onTap: () {
+                                          showAlert(context);
+                                        },
+                                        child: Icon(Icons.image,
+                                        color: isSignupScreen ? Colors.cyan : Colors.grey[300],),
+                                      ),
+                                    ],
                                   ),
                                   if(isSignupScreen)
                                   Container(
-                                    margin: EdgeInsets.only(top: 3),
+                                    margin: EdgeInsets.fromLTRB(0, 3, 37, 0),
                                     height: 2,
                                     width: 75,
                                     color: Color.fromARGB(255, 24, 82, 129),
@@ -458,6 +494,17 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                           showSpinner = true; // 로딩 화면 출력
                         });
                         if(isSignupScreen){
+                          if(userPickedImage == null){ // 회원가입 시 프로필 사진이 널이면
+                            setState(() {
+                              showSpinner = false; // 로딩 화면화면 안띄우고
+                            });
+                            ScaffoldMessenger.of(context).showSnackBar( // 에러 메시지 출력
+                              SnackBar(
+                                content: Text('프로필 이미지를 선택하십시오.'),
+                              )
+                            );
+                            return;
+                          }
                           _tryValidation(); // 로그인 시도
 
                           try{
@@ -465,12 +512,23 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                               email: userEmail, 
                               password: userPassword,
                             );
-                            FirebaseFirestore.instance.collection('user').doc(newUser.user!.uid)
-                            .set({ // 회원가입 시 유저 정보 저장
-                              'email': userEmail,
-                              'userName': userName,
-                              'uid': newUser.user!.uid,
-                            });
+
+                            final refImage = FirebaseStorage.instance.ref()
+                              .child('picked_image')
+                              .child(newUser.user!.uid + '.png'); // 유저 uid로 프로필 사진 저장
+
+                            await refImage.putFile(userPickedImage!); // 프로필 사진 저장
+                            final url = await refImage.getDownloadURL();
+
+                            await FirebaseFirestore.instance
+                              .collection('user')
+                              .doc(newUser.user!.uid)
+                              .set(
+                              { // 회원가입 시 유저 정보 저장
+                                'email': userEmail,
+                                'userName': userName,
+                                'picked_image': url,
+                              });
 
                             if(newUser.user != null){ 
                               Navigator.push(
@@ -484,8 +542,9 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                                 showSpinner = false; // 로딩 화면 제거
                               });
                             }// 회원가입 성공 시 로비 화면으로 이동
-                          } catch(e){ // 회원가입 실패 시
+                          } catch(e){ // 회원가입 실패 시                          
                             print(e);
+                            if(mounted){
                             ScaffoldMessenger.of(context).showSnackBar( // 에러 메시지 출력
                               SnackBar(
                                 content: Text('이메일 혹은 비밀번호를 다시 확인하십시오.'),
@@ -494,6 +553,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                             setState(() {
                                 showSpinner = false; // 로딩 화면 제거
                               });
+                            }
                           }
                         } // 회원가입 창에서 로그인 버튼을 눌렀을 때
       

@@ -20,15 +20,16 @@ class Messages extends StatelessWidget {
             child: CircularProgressIndicator(), // 로딩중이라고 표시
           );
         }
-        final chatdocs = snapshot.data!.docs; // final docs는 테이블의 내용
+        final chatDocs = snapshot.data!.docs; // final docs는 테이블의 내용
         return ListView.builder(
           reverse: true,
-          itemCount: chatdocs.length,
+          itemCount: chatDocs.length,
           itemBuilder: (context, index){
             return ChatBubbles( 
-              chatdocs[index]['text'],
-              chatdocs[index]['userName'].toString(), // 메시지를 보낸 유저의 이름
-              chatdocs[index]['userID'].toString() == user!.uid, // 현재 유저의 uid와 메시지를 보낸 유저의 uid가 같으면 true, 다르면 false
+              chatDocs[index]['text'],
+              chatDocs[index]['userName'].toString(), // 메시지를 보낸 유저의 이름
+              chatDocs[index]['userID'].toString() == user!.uid, // 현재 유저의 uid와 메시지를 보낸 유저의 uid가 같으면 true, 다르면 false
+              chatDocs[index]['userImage']
             );
           },
         );
