@@ -55,24 +55,54 @@ class _LobbyScreenState extends State<LobbyScreen> {
       ),
       body:Padding(
         padding: EdgeInsets.all(10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            ElevatedButton(
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
-              },
-              child: Text('Chat'),
-            ),
-            ElevatedButton(
-              onPressed: (){
-                 // Navigator.push(context, MaterialPageRoute(builder: (context) => Counter()));
-              },
-              child: Text('Counter'),
-            ),
-          ],
-        )
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              ElevatedButton(
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+                },
+                child: Text('Chat'),
+              ),
+              ElevatedButton(
+                onPressed: (){
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => Counter()));
+                },
+                child: Text('Counter'),
+              ),
+            ],
+          )
         ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_filled),
+            label: '홈',
+            backgroundColor: Colors.blue,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_sharp),
+            label: '마이페이지',
+            backgroundColor: Colors.blue,
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: '설정',
+            backgroundColor: Colors.blue,
+          ),
+        ],
+        onTap: (int index){
+          if(index == 0){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => LobbyScreen()));
+          }
+          else if(index == 1){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => LobbyScreen()));
+          }
+          else if(index == 2){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => LobbyScreen()));
+          }
+        }
+      ),
       ); 
   }
 }

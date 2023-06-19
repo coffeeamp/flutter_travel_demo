@@ -41,6 +41,7 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: Text('Chat Screen')
       ),
+      backgroundColor: Colors.grey[350],
       body: Container(
         child: Column(
           children: [
