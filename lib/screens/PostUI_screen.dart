@@ -1,48 +1,102 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_travel_demo/post/post.dart';
-import 'package:flutter_travel_demo/post/post_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_travel_demo/post/post.dart'; // Post 모델 클래스 파일
+import 'package:flutter_travel_demo/post/post_provider.dart'; // PostProvider 클래스 파일
 
-class PostScreen extends StatelessWidget {
-  const PostScreen({super.key});
-
+class PostUIScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final postProvider = Provider.of<PostProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
-        title: Text('포스팅 화면'), // 타이틀 텍스트
+        title: Text('Post UI'),
       ),
-      body: Column(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              await postProvider.getAllPost(); // 포스트 리스트를 가져옴
-            },
-            child: Text('포스트 가져오기'),
-          ),
-          Consumer<PostProvider>(
-            builder : (context, postProvider, child){
-              if (postProvider.posts.isEmpty){
-                return Text('포스트가 없습니다.');
-              } else{
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: postProvider.posts.length, // 포스트 리스트의 길이만큼 아이템을 만듬
-                    itemBuilder: (context, index){
-                      return ListTile(
-                        title: Text(postProvider.posts[index].title), // 포스트의 타이틀을 가져옴
-                        subtitle: Text(postProvider.posts[index].content), // 포스트의 내용을 가져옴
-                      );
-                    }
-                  )
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                _showCreatePostDialog(context); // 게시글 작성 다이얼로그 호출
+              },
+              child: Text('게시글 작성'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // 게시글 조회
+                Provider.of<PostProvider>(context, listen: false).getAllPosts();
+              },
+              child: Text('게시글 조회'),
+            ),
+            Consumer<PostProvider>(
+              builder: (context, postProvider, _) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: postProvider.posts.length,
+                  itemBuilder: (context, index) {
+                    Post post = postProvider.posts[index];
+                    return ListTile(
+                      title: Text(post.title),
+                      subtitle: Text(post.content),
+                    );
+                  },
                 );
-              }
-            }
-          ),
-        ],
+              },
+            ),
+          ],
+        ),
       ),
+    );
+  }
+
+  void _showCreatePostDialog(BuildContext context) {
+    String title = '';
+    String content = '';
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('게시글 작성'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                decoration: InputDecoration(hintText: '제목'),
+                onChanged: (value) => title = value,
+              ),
+              SizedBox(height: 8),
+              TextField(
+                decoration: InputDecoration(hintText: '내용'),
+                onChanged: (value) => content = value,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('취소'),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (title.isNotEmpty && content.isNotEmpty) {
+                  Post post = Post(title: title, content: content);
+                  await Provider.of<PostProvider>(context, listen: false).createPost(post);
+                  Navigator.pop(context);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('제목과 내용을 입력해주세요.'),
+                    ),
+                  );
+                }
+              },
+              child: Text('작성'),
+            ),
+          ],
+        );
+      },
     );
   }
 }
