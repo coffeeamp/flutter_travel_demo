@@ -74,7 +74,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
               ),
               ElevatedButton(
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => PostUIScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => PostListScreen()));
                 },
                 child: Text('POST'),
               ),
