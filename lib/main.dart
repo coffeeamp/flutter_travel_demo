@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_travel_demo/post/post_provider.dart'; // 위에서 정의한 PostProvider 클래스 파일
+import 'package:flutter_travel_demo/providers/post_provider.dart'; // 위에서 정의한 PostProvider 클래스 파일
 import 'package:flutter_travel_demo/screens/lobby_screen.dart';
 import 'package:flutter_travel_demo/screens/main_screen.dart';
 
