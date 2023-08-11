@@ -17,8 +17,26 @@ class PostListScreen extends StatelessWidget {
         builder: (ctx, dataSnapshot){
           if(dataSnapshot.connectionState == ConnectionState.waiting){
             return Center(child: CircularProgressIndicator());
-          }ekse
+          }else{
+            if(dataSnapshot.error != null){
+              return Center(child: Text('An error occurred!'));
+          }else{
+            return Consumer<PostProvider>(
+              child: Center(child: const Text('Got no posts yet')),
+              builder: (ctx, postProvider, ch) => postProvider.posts.length <= 0
+              ? ch!
+              : ListView.builder(
+                itemCount: postProvider.posts.length,
+                itemBuilder: (ctx, i) => ListTile(
+                  title: Text(postProvider.posts[i].title),
+                  subtitle: Text(postProvider.posts[i].content),
+                ),
+              ),
+            );
+          }
+        }
         },
+    ),
     );
   }
 }
