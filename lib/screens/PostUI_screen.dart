@@ -35,13 +35,11 @@ class PostListScreen extends StatelessWidget {
                     );
                   },
                 );
-              }
-                ),
-              ),
+              },
             );
           }
         }
-        },
+      },
     ),
     );
   }
