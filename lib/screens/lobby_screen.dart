@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_travel_demo/screens/APIconnect_screen.dart';
-import 'package:flutter_travel_demo/screens/PostUI_screen.dart';
 import 'package:flutter_travel_demo/screens/chat_screen.dart';
 // import 'package:flutter_travel_demo/screens/counter.dart';
 
@@ -74,7 +73,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
               ),
               ElevatedButton(
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => PostListScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ApiScreen()));
                 },
                 child: Text('POST'),
               ),
