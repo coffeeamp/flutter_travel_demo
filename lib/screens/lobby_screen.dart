@@ -73,7 +73,7 @@ class _LobbyScreenState extends State<LobbyScreen> {
               ),
               ElevatedButton(
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ApiScreen())); // 수정 필요
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ApiScreen())); // 수정 필요함
                 },
                 child: Text('POST'),
               ),
