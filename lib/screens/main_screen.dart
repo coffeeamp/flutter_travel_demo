@@ -12,6 +12,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginSignupScreen extends StatefulWidget {
   const LoginSignupScreen({super.key});
+  
+
+  @override
+  State<LoginSignupScreen> createState() => _LoginSignupScreenState();
+}
+
+class _LoginSignupScreenState extends State<LoginSignupScreen> {
   Future<UserCredential> signInWithGoogle() async {
   // Trigger the authentication flow
   final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -28,12 +35,6 @@ class LoginSignupScreen extends StatefulWidget {
   // Once signed in, return the UserCredential
   return await FirebaseAuth.instance.signInWithCredential(credential);
 }
-
-  @override
-  State<LoginSignupScreen> createState() => _LoginSignupScreenState();
-}
-
-class _LoginSignupScreenState extends State<LoginSignupScreen> {
   final _authentication = FirebaseAuth.instance; // 사용자등록, 로그인 메서드 제공
 
 
@@ -648,7 +649,7 @@ class _LoginSignupScreenState extends State<LoginSignupScreen> {
                     Text(isSignupScreen ? 'or sign up with' : 'or login with', style: TextStyle(color: Colors.grey[700], fontSize: 16),),
                     SizedBox(height: 10,),
                     TextButton.icon(
-                      onPressed: () {},
+                      onPressed: signInWithGoogle,
                       style: TextButton.styleFrom(
                         foregroundColor: Colors.white,
                         minimumSize: Size(155, 40),
