@@ -54,48 +54,104 @@ class _LobbyScreenState extends State<LobbyScreen> {
           padding: EdgeInsets.zero,
         ),
       ),
-      body:Padding(
-        padding: EdgeInsets.all(10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              ElevatedButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
-                },
-                child: Text('Chat'),
-              ),
-              ElevatedButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ApiScreen()));
-                },
-                child: Text('API'),
-              ),
-              ElevatedButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ApiScreen())); // 수정 필요함
-                },
-                child: Text('POST'),
-              ),
-            ],
-          )
+      body: Padding(
+  padding: EdgeInsets.fromLTRB(10, 50, 10, 10),
+  child: GridView.count(
+    crossAxisCount: 3, // 열의 개수
+    mainAxisSpacing: 10.0, // 수직 간격
+    crossAxisSpacing: 10.0, // 수평 간격
+    children: [
+      ElevatedButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor : Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
+        child: Text('채팅'),
+      ),
+      ElevatedButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ApiScreen()));
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor : Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: Text('API'),
+      ),
+      ElevatedButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ApiScreen())); // 수정 필요함
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor : Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: Text('POST'),
+      ),
+      ElevatedButton(
+        onPressed: () {
+          // Add your logic for the fourth button
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor : Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: Text('Button 4'),
+      ),
+      ElevatedButton(
+        onPressed: () {
+          // Add your logic for the fifth button
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor : Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: Text('Button 5'),
+      ),
+      ElevatedButton(
+        onPressed: () {
+          // Add your logic for the sixth button
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor : Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: Text('Button 6'),
+      ),
+    ],
+  ),
+),
       bottomNavigationBar: BottomNavigationBar(
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home_filled),
             label: '홈',
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_sharp),
             label: '마이페이지',
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.white,
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: '설정',
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.white,
           ),
         ],
         onTap: (int index){
