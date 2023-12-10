@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_travel_demo/screens/APIconnect_screen.dart';
 import 'package:flutter_travel_demo/screens/chat_screen.dart';
 // import 'package:flutter_travel_demo/screens/counter.dart';
@@ -52,6 +53,14 @@ class _LobbyScreenState extends State<LobbyScreen> {
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('Drawer Header'),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+          ],
         ),
       ),
       body: Padding(
