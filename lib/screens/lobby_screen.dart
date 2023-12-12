@@ -16,6 +16,7 @@ class LobbyScreen extends StatefulWidget {
 class _LobbyScreenState extends State<LobbyScreen> {
   final _authentication = FirebaseAuth.instance;
   User? loggedUser; // ?는 null이 될 수 있다는 뜻
+  String? profileImageURL; // 유저의 프로필 이미지 URL
 
   @override
   void initState() {
@@ -30,9 +31,30 @@ class _LobbyScreenState extends State<LobbyScreen> {
       if (user != null) { // 로그인이 되어있으면
         loggedUser = user; // loggedUser에 user를 넣어줌
         print(loggedUser!.email);
+
+        // 프로필 이미지 다운로드 URL 가져오기
+        await _getImageURL();
+
+        setState(() {
+          // 프로필 이미지 url이 로딩되면 화면을 다시 그려줌
+        });
       }
     }catch(e){
       print(e);
+    }
+  }
+
+  // 프로필 이미지 다운로드 URL 가져오기
+  Future<void> _getImageURL() async {
+    try {
+      final storage = firebase_storage.FirebaseStorage.instance;
+      final ref = storage.ref().child(loggedUser!.uid);
+      final downloadURL = await ref.getDownloadURL();
+      setState(() {
+        profileImageURL = downloadURL;
+      });
+    } catch (e) {
+      print('Error fetching image URL: $e');
     }
   }
 
@@ -55,10 +77,22 @@ class _LobbyScreenState extends State<LobbyScreen> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              child: Text('Drawer Header'),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
+              child: Column(
+                children: [
+                  // 로그인이 되어있으면 프로필 이미지를 보여줌
+                  if (profileImageURL != null)
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(profileImageURL!),
+                      radius: 40,
+                    ),
+                  // 유저 이메일을 보여줌
+                  if (loggedUser != null)
+                    Text(
+                      loggedUser!.email!,
+                      style: TextStyle(color: Colors.black, fontSize: 20),
+                    ),
+                ],
+              )
             ),
           ],
         ),
