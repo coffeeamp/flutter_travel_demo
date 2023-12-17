@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter_travel_demo/screens/APIconnect_screen.dart';
 import 'package:flutter_travel_demo/screens/chat_screen.dart';
@@ -15,57 +16,50 @@ class LobbyScreen extends StatefulWidget {
 
 class _LobbyScreenState extends State<LobbyScreen> {
   final _authentication = FirebaseAuth.instance;
-  User? loggedUser; // ?는 null이 될 수 있다는 뜻
-  String? profileImageURL; // 유저의 프로필 이미지 URL
+  User? loggedUser;
 
   @override
   void initState() {
-    // TODO: implement initState 
     super.initState();
     getCurrentUser();
   }
 
-  void getCurrentUser() async { // 로그인이 되어있는지 확인
-    try{
-      final user = _authentication.currentUser;
-      if (user != null) { // 로그인이 되어있으면
-        loggedUser = user; // loggedUser에 user를 넣어줌
-        print(loggedUser!.email);
-
-        // 프로필 이미지 다운로드 URL 가져오기
-        await _getImageURL();
-
+  void getCurrentUser() async { // 현재 유저 정보 가져오기
+    try {
+      final user = _authentication.currentUser; 
+      if (user != null) {
         setState(() {
-          // 프로필 이미지 url이 로딩되면 화면을 다시 그려줌
+          loggedUser = user;
         });
       }
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }
 
-  // 프로필 이미지 다운로드 URL 가져오기
-  Future<void> _getImageURL() async {
+  Future<String> getUserProfileImageUrl(String userId) async {
     try {
-      final storage = firebase_storage.FirebaseStorage.instance;
-      final ref = storage.ref().child(loggedUser!.uid);
-      final downloadURL = await ref.getDownloadURL();
-      setState(() {
-        profileImageURL = downloadURL;
-      });
+      // 여기서 userId를 사용하여 데이터베이스 또는 다른 소스에서 이미지 URL을 가져오기
+      // 아래는 예시로 Firebase Storage에서 가져오는 방법
+
+      firebase_storage.Reference ref =
+          firebase_storage.FirebaseStorage.instance.ref().child('picked_image/$userId.png');
+      String downloadUrl = await ref.getDownloadURL();
+
+      return downloadUrl;
     } catch (e) {
-      print('Error fetching image URL: $e');
+      print(e);
+      return ''; // 에러가 발생하면 빈 문자열 반환 또는 다른 기본값 설정
     }
   }
-
-  @override
+@override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Lobby page'),
         actions: [
           IconButton(
-            onPressed: (){
+            onPressed: () {
               _authentication.signOut();
             },
             icon: Icon(Icons.exit_to_app_outlined),
@@ -79,18 +73,29 @@ class _LobbyScreenState extends State<LobbyScreen> {
             DrawerHeader(
               child: Column(
                 children: [
-                  // 로그인이 되어있으면 프로필 이미지를 보여줌
-                  if (profileImageURL != null)
-                    CircleAvatar(
-                      backgroundImage: NetworkImage(profileImageURL!),
-                      radius: 40,
-                    ),
-                  // 유저 이메일을 보여줌
-                  if (loggedUser != null)
-                    Text(
-                      loggedUser!.email!,
-                      style: TextStyle(color: Colors.black, fontSize: 20),
-                    ),
+                   // 로그인이 되어있으면 프로필 이미지를 보여줌
+            if (loggedUser != null)
+              FutureBuilder<String>(
+                future: getUserProfileImageUrl(loggedUser!.uid),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator(); // 데이터를 기다리는 동안 로딩 표시
+                  }
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+                  return CircleAvatar(
+                    backgroundImage: NetworkImage(snapshot.data!),
+                    radius: 40,
+                  );
+                },
+              ),
+            // 유저 이메일을 보여줌
+            if (loggedUser != null)
+              Text(
+                loggedUser!.email!,
+                style: TextStyle(color: Colors.black, fontSize: 20),
+              ),
                 ],
               )
             ),
