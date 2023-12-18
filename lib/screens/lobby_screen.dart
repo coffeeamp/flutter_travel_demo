@@ -94,10 +94,22 @@ class _LobbyScreenState extends State<LobbyScreen> {
             if (loggedUser != null)
               Text(
                 loggedUser!.email!,
-                style: TextStyle(color: Colors.black, fontSize: 20),
+                style: TextStyle(color: Colors.black, fontSize: 15),
               ),
                 ],
               )
+            ),
+            ListTile(
+              title: Text('Item 1'),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Item 2'),
+              onTap: () {
+                Navigator.pop(context);
+              },
             ),
           ],
         ),
